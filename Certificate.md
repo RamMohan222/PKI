@@ -50,5 +50,7 @@ openssl req -key domain.key -new -x509 -days 365 -out domain.crt
 ```shell
 openssl pkcs8 -topk8 -inform PEM -outform PEM -in private.pem -out key-pkcs8.pem
 openssl pkcs8 -topk8 -inform PEM -outform DER -in private.der -out key-pkcs8.der
+# To convert with out password protection
+openssl pkcs8 -topk8 -inform PEM -outform DER -in private.pem -out private.der -nocrypt
 ```
 
