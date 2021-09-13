@@ -43,7 +43,7 @@ openssl rsa -in privkey.pem -passin stdin -pubout -out privkey.pub
 
 4. Generate Certificate with Private key.
 ```shell
-openssl req -key domain.key -new -x509 -days 365 -out domain.crt
+openssl req -key private.key -new -x509 -sha256 -days 365 -out domain.crt
 ```
 
 5. To convert private key into PKCS8 
