@@ -4,9 +4,15 @@ req/x509/p7b
 #### Generating a Self-Signed Certificate with OpenSSL
 The bellow command will generate the private key and certificate
 ```shell
+# certificates in PEM
 openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout privateKey.key -out certificate.crt
 # Certificate with subject details in the command it self.
 openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:4096 -keyout private.pem -out certificate.crt -subj "/C=IN/ST=AP/L=EN/CN=localhost/emailAddress=localhost@domain.com"
+
+#Certificates in DER
+openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout privateKey.key -out certificate.crt -outform DER
+# Certificate with subject details in the command it self.
+openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:4096 -keyout private.pem -out certificate.crt -subj "/C=IN/ST=AP/L=EN/CN=localhost/emailAddress=localhost@domain.com" -outform DER
 
 # To convert certificate into PEM/DER [by default certificate into pem]
 openssl x509 -in certificatename.cer -outform PEM -out certificatename.pem
