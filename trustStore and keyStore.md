@@ -1,10 +1,10 @@
-### Create Trust Store and KeyStore
+## Create Trust Store and KeyStore
 ----
 1. KeyStore : It contains private keys and public certificates which are used to authenticate themselves to the connecting party or client.
 2. TrustStore: It contains trusted SSL or public certificates.
 
-
-1. Create a keypair and keystore
+---
+### 1. Create a keypair and keystore
 
 ```shell
 keytool -genkeypair -alias <name> -keyalg <algorithm> -keysize <size> -dname <subject> -validity <days> -keystore <path to keystore> -storepass <password> -keypass <same password>
@@ -34,7 +34,7 @@ The keystore password can be any value. It is used to generate a key to encrypt 
 -keypass <same password>
 The key password must be the same as the storepass password.
 ```
-2. Export a certificate from keystore
+### 2. Export a certificate from keystore
 ```shell
 keytool -exportcert -alias <name> -keystore <path to keystore> -file <path to cert file> -storepass <password>
 ```
@@ -50,7 +50,7 @@ The path to the file that contains the exported certificate (for example: /etc/c
 -storepass <password>
 The keystore password that is used in step 1.
 ```
-3. Create a truststore
+### 3. Create a truststore
 ```shell
 keytool -importcert -alias <name> -file <path to cert file>.cer -keystore <path to truststore> -storepass <password>
 ```
