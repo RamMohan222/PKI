@@ -63,8 +63,7 @@ cat <signed_cert_filename> <intermediate.cert> [<intermediate2.cert>] <root ca.c
 type <signed_cert_filename> <intermediate.cert> [<intermediate2.cert>] <root ca.cert> > cert-chain.txt
 
 openssl pkcs12 -export -in cert-chain.txt -inkey <private_key_filename> -name 'tomcat' -out keystore.p12
-```
+
 # To convert PFX to PEM
-```shell
 openssl pkcs12 -in certificatename.pfx -nocerts -nodes -out certificatename.pem
 ```
