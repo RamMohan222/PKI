@@ -125,3 +125,52 @@ keytool -delete -alias serverTrust -keystore serverTrustStore.p12 -storepass <pa
 ```shell
 keytool -delete -alias clientTrust -keystore clientTrustStore.p12 -storepass <password>
 ```
+## Certificate Signing Request (CSR)
+```shell
+# Create new CSR
+keytool -certreq -alias node -file node.csr -keypass  password -keystore keystore.jks -storepass password
+
+# To convert CSR to PEM
+openssl ca -in node.csr -out certificate.pem
+
+# Signing with Root CA
+openssl x509 -req -days 3650 -in node.csr -CA ca.crt -CAkey ca.key -set_serial 01 -out signedcert.crt
+
+# import the returned signed certificate:
+keytool -import -alias node -file signedcert.crt -keypass password -keystore keystore.jks -storepass password
+
+# import CA certificate
+keytool -import -alias ca -file CA.crt -keypass password -keystore keystore.jks -storepass password
+
+# If there is an intermediate certificate and your csr is signed by intermediate certificate then import intermediate certificate
+keytool -import -alias interca -file intercert.crt -keypass password -keystore keystore.jks -storepass password
+
+# To confirm signed certificate and exported certificates are same, later with this we can create trust store.
+keytool -export -alias node -file node.crt -keystore keystore.jks
+
+#The exported certificate and CA root and/or intermediary certificates must now be imported to the truststore.
+keytool -import -trustcacerts -alias node -file node.crt -keystore truststore.ts -storepass password -noprompt
+keytool -import -trustcacerts -alias ca -file CA.crt -keystore truststore.ts -storepass password -noprompt
+keytool -import -trustcacerts -alias interca -file intercert.pem -keystore truststore.ts -storepass password -noprompt
+```
+### Self Sign
+If you have setup your own certificate authority, you can self-sign the request using openssl
+```shell
+# Convert the certificate to a plain PEM certificate
+openssl x509 -in node.crt -out certificate.pem -outform PEM
+
+# For a self-signed certificate, you must combine the signed certificate with the CA certificate
+# For linux
+cat certificate.pem [<interca.crt>] CA.crt > certfull.pem
+# For windows
+type certificate.pem [<interca.crt>] CA.crt > certfull.pem
+
+# This certificate can be imported into your keystore and truststore
+# To import your signed certificate into your keystore
+keytool -import -alias node -file certfull.pem -keypass password -keystore keystore.jks -storepass password
+
+# Then export the certificate for use in your truststore
+keytool -export -alias node -file finalNode.crt -keystore keystore.jks
+
+# The same exported certificate must also be to the truststore
+keytool -import -trustcacerts -alias node -file finalNode.crt -keystore truststore.ts -storepass password -noprompt
