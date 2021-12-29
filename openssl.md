@@ -1,4 +1,4 @@
-req/x509/p7b
+req/x509
 -----
 
 #### Generating a Self-Signed Certificate with OpenSSL
